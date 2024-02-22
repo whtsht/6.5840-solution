@@ -23,6 +23,15 @@ func MakeClerk(server *labrpc.ClientEnd) *Clerk {
 	return ck
 }
 
+func (c *Clerk) Call(name string, args HasId, reply interface{}) {
+	args.SetId(nrand())
+	for {
+		if c.server.Call(name, args, reply) {
+			break
+		}
+	}
+}
+
 // fetch the current value for a key.
 // returns "" if the key does not exist.
 // keeps trying forever in the face of all other errors.
@@ -37,7 +46,7 @@ func (ck *Clerk) Get(key string) string {
 	// You will have to modify this function.
 	args := GetArgs{Key: key}
 	reply := GetReply{}
-	ck.server.Call("KVServer.Get", &args, &reply)
+	ck.Call("KVServer.Get", &args, &reply)
 	return reply.Value
 }
 
@@ -55,7 +64,7 @@ func (ck *Clerk) PutAppend(key string, value string, op string) string {
 		Value: value,
 	}
 	reply := PutAppendReply{}
-	ck.server.Call("KVServer."+op, &args, &reply)
+	ck.Call("KVServer."+op, &args, &reply)
 	return reply.Value
 }
 
