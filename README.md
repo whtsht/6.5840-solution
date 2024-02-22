@@ -3,7 +3,7 @@ This repository is my solution to [6.5840: Distributed Systems 2024 Lab](https:/
 
 ## TODO
 - [x] Lab 1: MapReduce
-- [ ] Lab 2: Key/Value server
+- [x] Lab 2: Key/Value server
 - [ ] Lab 3: Raft
 - [ ] Lab 4: Fault-tolerant Key/Value Service
 - [ ] Lab 5: Sharded Key/Value Service

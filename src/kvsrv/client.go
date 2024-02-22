@@ -1,12 +1,16 @@
 package kvsrv
 
-import "6.5840/labrpc"
-import "crypto/rand"
-import "math/big"
+import (
+	"6.5840/labrpc"
+	"crypto/rand"
+	"math/big"
+)
 
 type Clerk struct {
 	server *labrpc.ClientEnd
 	// You will have to modify this struct.
+	taskCounter int64
+	id          int64
 }
 
 func nrand() int64 {
@@ -20,16 +24,20 @@ func MakeClerk(server *labrpc.ClientEnd) *Clerk {
 	ck := new(Clerk)
 	ck.server = server
 	// You'll have to add code here.
+	ck.id = nrand()
+	ck.taskCounter = 0
 	return ck
 }
 
 func (c *Clerk) Call(name string, args HasId, reply interface{}) {
-	args.SetId(nrand())
+	args.SetId(c.id)
+	args.SetCount(c.taskCounter)
 	for {
 		if c.server.Call(name, args, reply) {
 			break
 		}
 	}
+	c.taskCounter += 1
 }
 
 // fetch the current value for a key.
